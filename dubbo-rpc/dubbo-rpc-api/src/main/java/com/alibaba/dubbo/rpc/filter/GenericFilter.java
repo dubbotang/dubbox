@@ -15,9 +15,6 @@
  */
 package com.alibaba.dubbo.rpc.filter;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.beanutil.JavaBeanAccessor;
 import com.alibaba.dubbo.common.beanutil.JavaBeanDescriptor;
@@ -30,15 +27,12 @@ import com.alibaba.dubbo.common.serialize.Serialization;
 import com.alibaba.dubbo.common.utils.PojoUtils;
 import com.alibaba.dubbo.common.utils.ReflectUtils;
 import com.alibaba.dubbo.common.utils.StringUtils;
-import com.alibaba.dubbo.rpc.Filter;
-import com.alibaba.dubbo.rpc.Invocation;
-import com.alibaba.dubbo.rpc.Invoker;
-import com.alibaba.dubbo.rpc.Result;
-import com.alibaba.dubbo.rpc.RpcException;
-import com.alibaba.dubbo.rpc.RpcInvocation;
-import com.alibaba.dubbo.rpc.RpcResult;
+import com.alibaba.dubbo.rpc.*;
 import com.alibaba.dubbo.rpc.service.GenericException;
 import com.alibaba.dubbo.rpc.support.ProtocolUtils;
+
+import java.io.IOException;
+import java.lang.reflect.Method;
 
 /**
  * GenericInvokerFilter.
@@ -120,6 +114,8 @@ public class GenericFilter implements Filter {
                     }
                 } else if (ProtocolUtils.isBeanGenericSerialization(generic)) {
                     return new RpcResult(JavaBeanSerializeUtil.serialize(result.getValue(), JavaBeanAccessor.METHOD));
+                } else if (ProtocolUtils.isNoChangeGenericSerialization(generic)) {
+                    return new RpcResult(result.getValue());
                 } else {
                     return new RpcResult(PojoUtils.generalize(result.getValue()));
                 }

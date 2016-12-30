@@ -15,11 +15,6 @@
  */
 package com.alibaba.dubbo.rpc.protocol.dubbo.telnet;
 
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.common.json.JSON;
 import com.alibaba.dubbo.common.utils.PojoUtils;
@@ -33,6 +28,11 @@ import com.alibaba.dubbo.rpc.Invoker;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.alibaba.dubbo.rpc.RpcInvocation;
 import com.alibaba.dubbo.rpc.protocol.dubbo.DubboProtocol;
+
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * InvokeTelnetHandler
@@ -116,21 +116,12 @@ public class InvokeTelnetHandler implements TelnetHandler {
     private static Method findMethod(Exporter<?> exporter, String method, List<Object> args) {
         Invoker<?> invoker = exporter.getInvoker();
         Method[] methods = invoker.getInterface().getMethods();
-        Method invokeMethod = null;
         for (Method m : methods) {
-            if (m.getName().equals(method) && m.getParameterTypes().length == args.size()) {
-                if (invokeMethod != null) { // 重载
-                    if (isMatch(invokeMethod.getParameterTypes(), args)) {
-                        invokeMethod = m;
-                        break;
-                    }
-                } else {
-                    invokeMethod = m;
-                }
-                invoker = exporter.getInvoker();
+            if (m.getName().equals(method) && isMatch(m.getParameterTypes(), args)) {
+                return m;
             }
         }
-        return invokeMethod;
+        return null;
     }
     
     private static boolean isMatch(Class<?>[] types, List<Object> args) {

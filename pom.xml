@@ -156,7 +156,7 @@
 		<maven_install_plugin_version>2.3.1</maven_install_plugin_version>
 		<maven_deploy_plugin_version>2.7</maven_deploy_plugin_version>
 
-        <maven-surefire-plugin_version>2.17</maven-surefire-plugin_version>
+        <maven-surefire-plugin_version>2.19.1</maven-surefire-plugin_version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -466,6 +466,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
 				<configuration>
 					<archive>
 						<addMavenDescriptor>true</addMavenDescriptor>
@@ -478,6 +479,7 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<version>3.0.1</version>
 				<artifactId>maven-source-plugin</artifactId>
 				<executions>
 					<execution>

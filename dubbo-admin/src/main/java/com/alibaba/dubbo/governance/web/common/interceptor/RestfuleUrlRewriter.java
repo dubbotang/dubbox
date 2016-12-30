@@ -15,20 +15,13 @@
  */
 package com.alibaba.dubbo.governance.web.common.interceptor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-
 import com.alibaba.citrus.service.requestcontext.rewrite.RewriteSubstitutionContext;
 import com.alibaba.citrus.service.requestcontext.rewrite.RewriteSubstitutionHandler;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
+
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Restful URL Rewrite成 WebX的URL。
@@ -101,8 +94,8 @@ public class RestfuleUrlRewriter implements RewriteSubstitutionHandler {
             return;
         }
         //兼容包含group的path
-        String[] split = (String[]) temp.toArray();
-        
+        String[] split = (String[]) temp.toArray(new String[temp.size()]);
+
         if(temp.size()>2&&temp.contains("services")){
             List<String> parts = new ArrayList<String>();
             parts.addAll(temp);

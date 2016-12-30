@@ -15,31 +15,20 @@
  */
 package com.alibaba.dubbo.common.utils;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.net.URL;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+
+import java.lang.reflect.*;
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * ReflectUtils
@@ -260,8 +249,9 @@ public final class ReflectUtils {
             if (genericClass instanceof ParameterizedType) { // 处理多级泛型
                 return (Class<?>) ((ParameterizedType) genericClass).getRawType();
             } else if (genericClass instanceof GenericArrayType) { // 处理数组泛型
-                return (Class<?>) ((GenericArrayType) genericClass).getGenericComponentType();
-            } else {
+				// 在 JDK 7 以上的版本, Foo<int[]> 不再是 GenericArrayType
+				return ((Class)genericClass).getComponentType();
+			} else {
                 return (Class<?>) genericClass;
             }
         } catch (Throwable e) {
@@ -784,11 +774,11 @@ public final class ReflectUtils {
 	 */
 	public static Method findMethodByMethodSignature(Class<?> clazz, String methodName, String[] parameterTypes)
 	        throws NoSuchMethodException, ClassNotFoundException {
-	    String signature = methodName;
-        if(parameterTypes != null && parameterTypes.length > 0){
-            signature = methodName + StringUtils.join(parameterTypes);
-        }
-        Method method = Signature_METHODS_CACHE.get(signature);
+		String signature = clazz.getName() + "." + methodName;
+		if(parameterTypes != null && parameterTypes.length > 0){
+			signature += StringUtils.join(parameterTypes);
+		}
+		Method method = Signature_METHODS_CACHE.get(signature);
         if(method != null){
             return method;
         }
