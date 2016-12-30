@@ -589,6 +589,8 @@ public class Constants {
 
     public static final String GENERIC_SERIALIZATION_NATIVE_JAVA   = "nativejava";
 
+    public static final String GENERIC_SERIALIZATION_NOCHANGE       = "nochange";
+
     public static final String GENERIC_SERIALIZATION_DEFAULT       = "true";
 
     public static final String GENERIC_SERIALIZATION_BEAN          = "bean";
